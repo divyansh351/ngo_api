@@ -1,14 +1,14 @@
 const express = require('express');
-const Product = require('../schemas/product')
 const catchAsync = require('../utils/catchAsync')
+const Product = require('../controllers/product')
 
 const router = express.Router();
 
 // return products array
-router.get('/', catchAsync(async (req, res) => {
-    const products = await Product.find({})
-    res.json(products);
-}))
+
+router.route('/')
+    .get(catchAsync(Product.show))
+    .post(Product.donateProduct);
 
 
 
