@@ -2,31 +2,28 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-const agentSchema = new Schema({
-    agent_name: String,
-    agent_photo: String,
-    agent_aadhar_number: {
+const DonorSchema = new Schema({
+    donor_name: String,
+    // photo
+    donor_mob_number: {
         type: String,
         required: true,
         unique: true
     },
-    agent_operation_area: String,
-    agent_address: String,
-    agent_mob_number: {
+    donor_address: String,
+    donor_email: {
         type: String,
         required: true,
         unique: true
     },
-    agent_email: {
+    donor_id_type: String,
+    donor_id_number: String,
+    donor_pan_number: {
         type: String,
-        required: true,
         unique: true
     },
-    agent_id_type: String,
-    agent_id_photo: String,
-    agent_active: Boolean,
-    agent_verified: Boolean,
-    agent_products: [
+    donor_anonymous: Boolean,
+    donor_products: [
         {
             type: Schema.Types.ObjectId,
             ref: 'product'
@@ -37,7 +34,7 @@ const agentSchema = new Schema({
     remark3: String,
     remark4: String,
     remark5: String
-});
+})
 
-donorSchema.plugin(passportLocalMongoose);
-module.exports = mongoose.model('agent', agentSchema);
+DonorSchema.plugin(passportLocalMongoose);
+module.exports = mongoose.model('donor', DonorSchema);

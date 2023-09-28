@@ -1,15 +1,19 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
-// const donorRoutes = require('./routes/donor');
+const donorRoutes = require('./routes/donor');
 // const agentRoutes = require('./routes/agent');
 // const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 
 
-const dbUrl = "mongodb://127.0.0.1:27017/ngo_api";
-const port = 3000;
+const dbUrl = process.env.DB_URL;
+const port = process.env.PORT;
 
 mongoose.connect(dbUrl)
 const db = mongoose.connection;
@@ -25,7 +29,7 @@ app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 
 
-// app.use('/donor', donorRoutes)
+app.use('/donor', donorRoutes)
 app.use('/product', productRoutes)
 // app.use('/agent', agentRoutes)
 // app.use('/admin', adminRoutes)

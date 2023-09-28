@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const receiverSchema = new Schema({
+const ReceiverSchema = new Schema({
     receiver_aadhar_number: {
         type: String,
         required: true,
@@ -20,4 +20,4 @@ const receiverSchema = new Schema({
     remark5: String
 })
 
-module.exports = mongoose.model('receiver', receiverSchema);
+module.exports = mongoose.model('receiver', ReceiverSchema);
