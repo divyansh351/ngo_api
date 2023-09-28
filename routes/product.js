@@ -6,8 +6,6 @@ const { storage } = require('../cloudinary')
 const upload = multer({ storage })
 const router = express.Router();
 
-// return products array
-
 router.route('/')
     .get(catchAsync(Product.show))
     .post(upload.array('before_pics'), Product.donateProduct);
