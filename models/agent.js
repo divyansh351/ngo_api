@@ -25,6 +25,11 @@ const AgentSchema = new Schema({
         required: true,
         unique: true
     },
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
     agent_id_type: String,
     agent_active: Boolean,
     // agent_verified: Boolean,

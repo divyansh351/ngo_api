@@ -10,6 +10,10 @@ const donorRoutes = require('./routes/donor');
 const agentRoutes = require('./routes/agent');
 // const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const session = require('express-session')
+const Agent = require('./models/agent')
 
 
 const dbUrl = process.env.DB_URL;
@@ -23,11 +27,27 @@ db.once('open', function () {
 })
 
 const app = express();
+const sessionOptions = {
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 
+app.use(session(sessionOptions));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(Agent.authenticate()));
+passport.serializeUser(Agent.serializeUser())
+passport.deserializeUser(Agent.deserializeUser())
 
 app.use('/donor', donorRoutes)
 app.use('/product', productRoutes)
