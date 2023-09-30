@@ -25,17 +25,5 @@ module.exports.registerAgent = async (req, res) => {
     agent.agent_photo.url = req.file.path;
     agent.agent_photo.filename = req.file.filename;
     await agent.save();
-    res.send({ "success": "true" })
-}
-
-module.exports.viewProfile = async (req, res) => {
-    const {
-        donor_mob_number,
-        donor_email
-    } = req.body;
-    const donor = await Agent.findOne({ donor_email: donor_email })
-    if (donor_mob_number === donor.donor_mob_number)
-        res.send({ "works": "true" });
-    else
-        res.send({ "works": "false" });
+    res.send("registerAgent works fine")
 }

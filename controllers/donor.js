@@ -23,7 +23,7 @@ module.exports.registerDonor = async (req, res) => {
         donor_anonymous: donor_anonymous
     })
     await donor.save();
-    res.send({ "success": "true" })
+    res.send("registerDonor works fine")
 }
 
 module.exports.viewProfile = async (req, res) => {
@@ -33,7 +33,7 @@ module.exports.viewProfile = async (req, res) => {
     } = req.body;
     const donor = await Donor.findOne({ donor_email: donor_email })
     if (donor_mob_number === donor.donor_mob_number)
-        res.send({ "works": "true" });
+        res.send("registerDonor works fine");
     else
-        res.send({ "works": "false" });
+        res.send("incorrect mobile number email");
 }
