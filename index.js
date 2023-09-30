@@ -8,7 +8,7 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const donorRoutes = require('./routes/donor');
 const agentRoutes = require('./routes/agent');
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -52,7 +52,7 @@ passport.deserializeUser(Agent.deserializeUser())
 app.use('/donor', donorRoutes)
 app.use('/product', productRoutes)
 app.use('/agent', agentRoutes)
-// app.use('/admin', adminRoutes)
+app.use('/admin', adminRoutes)
 
 
 app.get('/', (req, res) => {
