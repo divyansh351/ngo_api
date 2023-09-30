@@ -21,16 +21,29 @@ const ProductSchema = new Schema({
     product_defects_before: String,
     product_defects_after: String,
     product_area_of_donation: String,
-    product_collection_status: Boolean,
-    product_reimbursement_status: Boolean,
-    product_repair_amount: Number,
-    product_received: Boolean,
+    product_collection_status: {
+        type: Boolean,
+        default: 0
+    },
+    product_reimbursement_status: {
+        type: Boolean,
+        default: 0
+    },
+    product_repair_amount: {
+        type: Number,
+        default: 0
+    },
+    product_received: {
+        type: Boolean,
+        default: 0
+    },
     product_donor: {
         type: Schema.Types.ObjectId,
         ref: 'donor'
     },
     product_agent: {
         type: Schema.Types.ObjectId,
+        default: "0",
         ref: 'agent'
     },
     remark1: String,

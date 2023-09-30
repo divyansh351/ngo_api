@@ -10,6 +10,7 @@ router.route('/')
     .get(catchAsync(Product.show))
     .post(upload.array('before_pics'), Product.donateProduct);
 
-
+router.route('/assign_agent')
+    .post(Product.assignAgent)
 
 module.exports = router

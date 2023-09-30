@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const donorRoutes = require('./routes/donor');
-// const agentRoutes = require('./routes/agent');
+const agentRoutes = require('./routes/agent');
 // const adminRoutes = require('./routes/admin');
 const productRoutes = require('./routes/product');
 
@@ -31,7 +31,7 @@ app.use(methodOverride('_method'))
 
 app.use('/donor', donorRoutes)
 app.use('/product', productRoutes)
-// app.use('/agent', agentRoutes)
+app.use('/agent', agentRoutes)
 // app.use('/admin', adminRoutes)
 
 
