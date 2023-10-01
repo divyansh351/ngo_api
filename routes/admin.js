@@ -4,8 +4,8 @@ const Admin = require('../controllers/admin')
 const router = express.Router();
 
 
-const verifyAdmin = (req,res)=>{
-    if(req.body.admin_key == process.env.ADMIN_KEY){
+const verifyAdmin = (req, res) => {
+    if (req.body.admin_key == process.env.ADMIN_KEY) {
         req.session.tag = 1;
         res.status(200).send("Success Login")
     }
@@ -13,8 +13,8 @@ const verifyAdmin = (req,res)=>{
         req.session.tag = 0;
     }
 }
-const isAdminLoggedIn = (req,res,next)=>{
-    if(req.session.tag==1) {
+const isAdminLoggedIn = (req, res, next) => {
+    if (req.session.tag == 1) {
         next()
     }
     else {
@@ -27,6 +27,6 @@ router.route('/')
 
 
 router.route('/login')
-.post(verifyAdmin)
+    .post(verifyAdmin)
 
 module.exports = router

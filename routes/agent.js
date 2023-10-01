@@ -12,7 +12,7 @@ const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl
         res.status(401).send("unauthorized access")
-    }else next();
+    } else next();
 }
 
 const storeReturnTo = (req, res, next) => {

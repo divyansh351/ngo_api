@@ -7,11 +7,11 @@ const { storage } = require('../cloudinary')
 const upload = multer({ storage })
 const router = express.Router();
 
-const verifyDonor = async(req,res)=>{
-    const {donor_email,donor_mob_number}=req.body;
-    const donor = await Donors.findOne({donor_email})
-    if(donor.donor_mob_number==donor_mob_number){
-        req.session.current_donor_id=donor._id;
+const verifyDonor = async (req, res) => {
+    const { donor_email, donor_mob_number } = req.body;
+    const donor = await Donors.findOne({ donor_email })
+    if (donor.donor_mob_number == donor_mob_number) {
+        req.session.current_donor_id = donor._id;
         res.status(200).send("Verification Success")
     }
     else {
@@ -19,8 +19,8 @@ const verifyDonor = async(req,res)=>{
     }
 }
 
-const isDonorLoggedIn = (req,res,next)=>{
-    if(req.session.current_donor_id) {
+const isDonorLoggedIn = (req, res, next) => {
+    if (req.session.current_donor_id) {
         next()
     }
     else {
