@@ -30,3 +30,9 @@ module.exports.registerAgent = async (req, res) => {
     console.log(registeredAgent);
     res.send("registerAgent works fine")
 }
+
+module.exports.viewAgent = async(req,res)=>{
+    console.log(req.session);
+    const agent=await Agent.findOne({username:req.session.passport.user});
+    res.send(agent);
+}
