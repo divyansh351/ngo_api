@@ -28,7 +28,7 @@ module.exports.registerAgent = async (req, res) => {
     agent.agent_photo.filename = req.file.filename;
     const registeredAgent = await Agent.register(agent, password);
     console.log(registeredAgent);
-    res.send("registerAgent works fine")
+    res.send("Agent Successfully registered")
 }
 
 module.exports.viewAgent = async (req, res) => {

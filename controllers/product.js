@@ -1,13 +1,13 @@
 const Product = require('../models/product')
 const Donor = require('../models/donor')
 const Agent = require('../models/agent')
+
 module.exports.show = async (req, res) => {
     const products = await Product.find({})
     res.json(products);
 }
 
 module.exports.donateProduct = async (req, res) => {
-    // console.log(req.files);
     const {
         product_title,
         product_category,
@@ -28,15 +28,15 @@ module.exports.donateProduct = async (req, res) => {
     product.product_donor = donor.id;
     console.log(product);
     await product.save();
-    res.send("donateProduct Works fine");
+    res.send("Product Donated Successfully");
 }
 
 module.exports.assignAgent = async (req, res) => {
     const { product_id, agent_id } = req.body;
     const product = await Product.findByIdAndUpdate(product_id, { product_agent: agent_id })
-    if (product.product_agent !== "0") res.send("Error: product already assigned")
+    if (product.product_agent !== "0") res.send("Error: Product already assigned to an agent")
     else {
         await Agent.findByIdAndUpdate(agent_id, { $push: { agent_products: product_id } })
-        res.send("agentAssign Works fine");
+        res.send("You are assigned this product as agent");
     }
 }
