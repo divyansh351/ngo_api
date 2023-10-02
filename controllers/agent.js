@@ -35,6 +35,8 @@ module.exports.registerAgent = async (req, res) => {
     }
 }
 
+module.exports.loginAgent = async (req, res) => { res.send("Agent logged in succesfully") }
+
 module.exports.viewAgent = async (req, res) => {
     try {
         console.log(req.session);

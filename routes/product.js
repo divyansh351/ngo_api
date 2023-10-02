@@ -10,17 +10,17 @@ const router = express.Router();
 
 
 router.route('/')
-    .get(catchAsync(Product.show))
+    .get(catchAsync(Product.showProducts))
     .post(upload.array('before_pics'), Product.donateProduct)
+
+router.route('/view')
+    .post(Product.viewProduct)
 
 router.route('/assign_agent')
     .post(isAgentLoggedIn, Product.assignAgent)
 
 router.route('/collect')
     .post(isAgentLoggedIn, Product.collectProduct)
-
-router.route('/view')
-    .post(Product.viewProduct)
 
 router.route('/repair')
     .post(isAgentLoggedIn, Product.repairProduct)

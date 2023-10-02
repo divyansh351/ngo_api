@@ -2,7 +2,7 @@ const Product = require('../models/product')
 const Donor = require('../models/donor')
 const Agent = require('../models/agent')
 
-module.exports.show = async (req, res) => {
+module.exports.showProducts = async (req, res) => {
     try {
         const products = await Product.find({})
         res.json(products);
@@ -58,7 +58,7 @@ module.exports.collectProduct = async (req, res) => {
     try {
         const { product_id, agent_id } = req.body;
         const product = await Product.findById(product_id);
-        if (agent_id == product_agent) {
+        if (agent_id == product.product_agent) {
             product.product_collection_status = 1;
             await product.save();
             res.send("Product succesfully collected");

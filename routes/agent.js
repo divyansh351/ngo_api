@@ -13,7 +13,9 @@ router.route('/register')
     .post(upload.single('agent_photo'), catchAsync(Agent.registerAgent))
 
 router.route('/login')
-    .post(storeReturnTo, passport.authenticate('local', { failureRedirect: '/agent/failure', failureMessage: true }), (req, res) => res.send("success"))
+    .post(storeReturnTo,
+        passport.authenticate('local', { failureRedirect: '/agent/failure', failureMessage: true }),
+        Agent.loginAgent)
 
 router.route('/view')
     .get(isAgentLoggedIn, Agent.viewAgent)
