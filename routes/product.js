@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.route('/')
     .get(catchAsync(Product.showProducts))
-    .post(upload.array('before_pics'), Product.donateProduct)
+    .post(upload.array('product_pictures_before'), Product.donateProduct)
 
 router.route('/view')
     .post(Product.viewProduct)

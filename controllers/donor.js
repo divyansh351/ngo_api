@@ -26,6 +26,7 @@ module.exports.registerDonor = async (req, res) => {
         await donor.save();
         res.send("Donor Successfully Registered")
     } catch (e) {
+        console.log(e);
         res.send(e);
     }
 }
