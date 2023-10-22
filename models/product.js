@@ -47,7 +47,6 @@ const ProductSchema = new Schema({
     },
     product_agent: {
         type: Schema.Types.ObjectId,
-        default: "0",
         ref: 'agent'
     },
     remark1: String,

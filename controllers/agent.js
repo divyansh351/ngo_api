@@ -2,6 +2,7 @@ const Agent = require('../models/agent')
 
 module.exports.registerAgent = async (req, res) => {
     try {
+
         const {
             agent_name,
             agent_aadhar_number,
