@@ -1,8 +1,8 @@
 const Donor = require('../models/donor')
+const jwt = require('jsonwebtoken');
 
 module.exports.registerDonor = async (req, res) => {
     try {
-        // if donor already exist then do something
         const {
             donor_name,
             donor_mob_number,
@@ -24,7 +24,13 @@ module.exports.registerDonor = async (req, res) => {
             donor_anonymous: donor_anonymous
         })
         await donor.save();
-        res.send("Donor Successfully Registered")
+        jwt.sign({ donor }, process.env.JWT_KEY, { expiresIn: '1d' }, (err, token) => {
+            if (err) { console.log(err) }
+            res.json({
+                message: 'Registration Successful',
+                token: token
+            });
+        });
     } catch (e) {
         console.log(e);
         res.send(e);
@@ -33,15 +39,17 @@ module.exports.registerDonor = async (req, res) => {
 
 module.exports.viewProfile = async (req, res) => {
     try {
-        const {
-            donor_mob_number,
-            donor_email
-        } = req.body;
-        const donor = await Donor.findOne({ donor_email: donor_email });
-        if (donor_mob_number === donor.donor_mob_number)
-            res.send(donor);
-        else
-            res.send("Combination of mobile and email given is incorrect");
+        jwt.verify(req.token, process.env.JWT_KEY, (err, authorizedData) => {
+            if (err) {
+                console.log('ERROR: Could not connect to the protected route');
+                res.sendStatus(403);
+            } else {
+                res.json({
+                    message: 'Successful log in',
+                    authorizedData
+                });
+            }
+        })
     } catch (e) {
         res.send(e);
     }
@@ -53,7 +61,13 @@ module.exports.verifyDonor = async (req, res) => {
         const donor = await Donor.findOne({ donor_email })
         if (donor.donor_mob_number == donor_mob_number) {
             req.session.current_donor_id = donor._id;
-            res.status(200).send("Verification Success");
+            jwt.sign({ donor }, process.env.JWT_KEY, { expiresIn: '1d' }, (err, token) => {
+                if (err) { console.log(err) }
+                res.json({
+                    message: 'Verification Successful',
+                    token: token
+                });
+            });
         }
         else {
             res.status(401).send("Email id and phone number does not match");
