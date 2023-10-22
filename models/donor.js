@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const DonorSchema = new Schema({
     donor_name: String,
@@ -36,5 +35,4 @@ const DonorSchema = new Schema({
     remark5: String
 })
 
-DonorSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model('donor', DonorSchema);
