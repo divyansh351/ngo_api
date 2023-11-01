@@ -29,6 +29,10 @@ const ProductSchema = new Schema({
         type: Boolean,
         default: 0
     },
+    product_repair_status: {
+        type: Boolean,
+        default: 0
+    },
     product_repair_amount: {
         type: Number,
         default: 0
@@ -43,7 +47,6 @@ const ProductSchema = new Schema({
     },
     product_agent: {
         type: Schema.Types.ObjectId,
-        default: "0",
         ref: 'agent'
     },
     remark1: String,
