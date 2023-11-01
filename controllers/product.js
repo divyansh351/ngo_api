@@ -2,7 +2,7 @@ const Product = require('../models/product')
 const Donor = require('../models/donor')
 const Agent = require('../models/agent')
 
-module.exports.show = async (req, res) => {
+module.exports.showProducts = async (req, res) => {
     try {
         const products = await Product.find({})
         res.json(products);
@@ -34,12 +34,14 @@ module.exports.donateProduct = async (req, res) => {
         product.product_donor = donor.id;
         console.log(product);
         await product.save();
+        donor.donor_products.push(product.id);
+        await donor.save();
         res.send("Product Donated Successfully");
     } catch (e) {
         res.send(e);
     }
 }
-
+// check this
 module.exports.assignAgent = async (req, res) => {
     try {
         const { product_id, agent_id } = req.body;
@@ -52,5 +54,58 @@ module.exports.assignAgent = async (req, res) => {
     } catch (e) {
         res.send(e);
     }
+}
+//
+module.exports.collectProduct = async (req, res) => {
+    try {
+        const { product_id, agent_id } = req.body;
+        const product = await Product.findById(product_id);
+        if (agent_id == product.product_agent) {
+            product.product_collection_status = 1;
+            await product.save();
+            res.send("Product succesfully collected");
+        }
+        else {
+            res.send("Product is currently not assigned to you!");
+        }
+    } catch (e) {
+        res.send(e)
+    }
+}
 
+module.exports.repairProduct = async (req, res) => {
+    try {
+        const {
+            product_id,
+            agent_id,
+            product_description_after,
+            product_defects_after,
+            prodcut_repair_amount
+        } = req.body;
+        const product = await Product.findById(product_id);
+        if (product.product_agent == agent_id) {
+            product.product_pictures_after = req.files.map(f => ({ url: f.path, filename: f.filename }));
+            prodcut.product_defects_after = product_defects_after
+            product.product_description_after = product_description_after
+            product.prodcut_repair_status = 1;
+            product.prodcut_repair_amount = prodcut_repair_amount;
+            await product.save();
+            res.send("Product details Succesfully Updated")
+        }
+        else {
+            res.send("This product is assigned to someone else.")
+        }
+    } catch (e) {
+        res.send(e);
+    }
+}
+
+module.exports.viewProduct = async (req, res) => {
+    try {
+        const { product_id } = req.body;
+        const product = await Product.findById(product_id);
+        res.send(product)
+    } catch (e) {
+        res.send(e);
+    }
 }
