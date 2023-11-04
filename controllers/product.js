@@ -36,7 +36,9 @@ module.exports.donateProduct = async (req, res) => {
         await product.save();
         donor.donor_products.push(product.id);
         await donor.save();
-        res.send("Product Donated Successfully");
+        res.json({
+            "message": "Donation Success"
+        });
     } catch (e) {
         res.send(e);
     }
@@ -46,10 +48,14 @@ module.exports.assignAgent = async (req, res) => {
     try {
         const { product_id, agent_id } = req.body;
         const product = await Product.findByIdAndUpdate(product_id, { product_agent: agent_id })
-        if (product.product_agent !== "0") res.send("Error: Product already assigned to an agent")
+        if (product.product_agent !== "0") res.json({
+            "Error": "Product already assigned to an agent"
+        })
         else {
             await Agent.findByIdAndUpdate(agent_id, { $push: { agent_products: product_id } })
-            res.send("You are assigned this product as agent");
+            res.json({
+                "message": "agent succesfully assigned"
+            });
         }
     } catch (e) {
         res.send(e);
