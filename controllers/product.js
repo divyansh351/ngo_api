@@ -110,7 +110,7 @@ module.exports.viewProduct = async (req, res) => {
     try {
         const { product_id } = req.body;
         const product = await Product.findById(product_id);
-        res.send(product)
+        res.json(product)
     } catch (e) {
         res.send(e);
     }
