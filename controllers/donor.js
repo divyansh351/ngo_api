@@ -57,8 +57,7 @@ module.exports.verifyDonor = async (req, res) => {
     try {
         const { donor_email, donor_mob_number } = req.body;
         const donor = await Donor.findOne({ donor_email })
-        // await donor.populate('donor_products');
-        console.log(donor);
+        await donor.populate('donor_products');
         if (donor.donor_mob_number == donor_mob_number) {
             req.session.current_donor_id = donor._id;
             jwt.sign({ donor }, process.env.JWT_KEY, { expiresIn: '1d' }, (err, token) => {

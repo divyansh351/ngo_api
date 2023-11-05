@@ -108,8 +108,10 @@ module.exports.repairProduct = async (req, res) => {
 
 module.exports.viewProduct = async (req, res) => {
     try {
-        const { product_id } = req.body;
+        const product_id = req.params.id;
+        console.log(product_id);
         const product = await Product.findById(product_id);
+        await (await product.populate('product_donor')).populate('product_agent')
         res.json(product)
     } catch (e) {
         res.send(e);
