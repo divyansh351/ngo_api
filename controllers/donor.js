@@ -28,7 +28,8 @@ module.exports.registerDonor = async (req, res) => {
             if (err) { console.log(err) }
             res.json({
                 message: 'Registration Successful',
-                token: token
+                token: token,
+                role: 'donor'
             });
         });
     } catch (e) {
@@ -64,7 +65,8 @@ module.exports.verifyDonor = async (req, res) => {
                 if (err) { console.log(err) }
                 res.json({
                     message: 'Verification Successful',
-                    token: token
+                    token: token,
+                    role: 'donor'
                 });
             });
         }
