@@ -45,7 +45,8 @@ module.exports.loginAgent = async (req, res) => {
         if (err) { console.log(err) }
         res.json({
             message: 'Agent Login Successful',
-            token: token
+            token: token,
+            role: 'agent'
         });
     });
 }
