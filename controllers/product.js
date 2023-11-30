@@ -28,7 +28,7 @@ module.exports.donateProduct = async (req, res) => {
       product_defects_before: product_defects_before,
       product_area_of_donation: product_area_of_donation,
     });
-    // product.product_pictures_before = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    product.product_pictures_before = req.files.map(f => ({ url: f.path, filename: f.filename }));
     const donor = await Donor.findOne({ donor_mob_number: donor_mob_number });
     product.product_donor = donor.id;
     console.log(product);
@@ -39,7 +39,7 @@ module.exports.donateProduct = async (req, res) => {
       message: "Donation Success",
     });
   } catch (e) {
-    res.send(e);
+    res.json({message: "Not Donated", error:e});
   }
 };
 // check this
