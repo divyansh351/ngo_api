@@ -14,7 +14,7 @@ router
   .post(upload.array("product_pictures_before"), Product.donateProduct);
 router.route("/:id").get(Product.viewProduct);
 router.route("/assign_agent").post(Product.assignAgent);
-router.route("/collect").post(isAgentLoggedIn, Product.collectProduct);
-router.route("/repair").post(isAgentLoggedIn, Product.repairProduct);
+router.route("/collect").post(Product.collectProduct);
+router.route("/repair").post(Product.repairProduct);
 
 module.exports = router;
