@@ -18,8 +18,6 @@ const cors = require("cors");
 
 const dbUrl = process.env.DB_URL;
 const port = process.env.PORT || 3000;
-// const DB_URL =
-//   "mongodb+srv://divyanshgupta351:Y0YgAeSPRZQiQCMj@ngoapicluster.py7qwxt.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(dbUrl);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
