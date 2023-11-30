@@ -28,7 +28,10 @@ module.exports.donateProduct = async (req, res) => {
       product_defects_before: product_defects_before,
       product_area_of_donation: product_area_of_donation,
     });
-    product.product_pictures_before = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    product.product_pictures_before = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
     const donor = await Donor.findOne({ donor_mob_number: donor_mob_number });
     product.product_donor = donor.id;
     console.log(product);
@@ -39,27 +42,41 @@ module.exports.donateProduct = async (req, res) => {
       message: "Donation Success",
     });
   } catch (e) {
-    res.json({message: "Not Donated", error:e});
+    res.json({ message: "Not Donated", error: e });
   }
 };
 // check this
 module.exports.assignAgent = async (req, res) => {
-  // try {
-  //     const { product_id, agent_id } = req.body;
-  //     const product = await Product.findByIdAndUpdate(product_id, { product_agent: agent_id })
-  //     if (product.product_agent !== "0") res.json({
-  //         "Error": "Product already assigned to an agent"
-  //     })
-  //     else {
-  //         await Agent.findByIdAndUpdate(agent_id, { $push: { agent_products: product_id } })
-  //         res.json({
-  //             "message": "agent succesfully assigned"
-  //         });
-  //     }
-  // } catch (e) {
-  //     res.send(e);
-  // }
-  res.json("it works");
+  try {
+    const { product_id, agent_id } = req.body;
+    console.log(typeof product_id);
+    const product = await Product.findById({ _id: product_id }); //abhi tk product_id string tha ,but _id se compare krne se wo object id bn gya
+    if (product !== null) {
+      if (product.product_agent == undefined) {
+        await Product.findByIdAndUpdate(product_id, {
+          product_agent: agent_id,
+        });
+        await Agent.findByIdAndUpdate(agent_id, {
+          $push: { agent_products: product_id },
+        });
+        res.json({
+          message: "agent succesfully assigned",
+        });
+      } else {
+        res.json({
+          Error: "Product already assigned to an agent",
+        });
+      }
+    } else {
+      // res.send("No such product");
+      res.json({
+        message: "No such product",
+      });
+    }
+  } catch (e) {
+    // res.send(e);
+    res.json(e);
+  }
 };
 //
 module.exports.collectProduct = async (req, res) => {
@@ -69,12 +86,18 @@ module.exports.collectProduct = async (req, res) => {
     if (agent_id == product.product_agent) {
       product.product_collection_status = 1;
       await product.save();
-      res.send("Product succesfully collected");
+      // res.send("Product succesfully collected");
+      res.json({
+        message: "Product succesfully collected",
+      });
     } else {
-      res.send("Product is currently not assigned to you!");
+      // res.send("Product is currently not assigned to you!");
+      res.json({
+        message: "Product is currently not assigned to you!",
+      });
     }
   } catch (e) {
-    res.send(e);
+    res.json(e);
   }
 };
 
@@ -98,12 +121,18 @@ module.exports.repairProduct = async (req, res) => {
       product.prodcut_repair_status = 1;
       product.prodcut_repair_amount = prodcut_repair_amount;
       await product.save();
-      res.send("Product details Succesfully Updated");
+      // res.send("Product details Succesfully Updated");
+      res.json({
+        message: "Product details Succesfully Updated",
+      });
     } else {
-      res.send("This product is assigned to someone else.");
+      // res.send("This product is assigned to someone else.");
+      res.json({
+        message: "This product is assigned to someone else.",
+      });
     }
   } catch (e) {
-    res.send(e);
+    res.json(e);
   }
 };
 
