@@ -16,5 +16,6 @@ router.route("/:id").get(Product.viewProduct);
 router.route("/assign_agent").post(Product.assignAgent);
 router.route("/collect").post(Product.collectProduct);
 router.route("/repair").post(Product.repairProduct);
+router.route("/receive").post(Product.receiveProduct);
 
 module.exports = router;
