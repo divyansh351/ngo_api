@@ -147,3 +147,24 @@ module.exports.viewProduct = async (req, res) => {
     res.send(e);
   }
 };
+module.exports.receiveProduct = async (req, res) => {
+  try {
+    const { product_id, agent_id } = req.body;
+    const product = await Product.findById(product_id);
+    if (agent_id == product.product_agent) {
+      product.product_received = 1;
+      await product.save();
+      // res.send("Product succesfully collected");
+      res.json({
+        message: "Final Donation Successful",
+      });
+    } else {
+      // res.send("Product is currently not assigned to you!");
+      res.json({
+        message: "Product is currently not assigned to you!",
+      });
+    }
+  } catch (e) {
+    res.json(e);
+  }
+};
