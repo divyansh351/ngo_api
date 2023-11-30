@@ -112,10 +112,10 @@ module.exports.repairProduct = async (req, res) => {
     } = req.body;
     const product = await Product.findById(product_id);
     if (product.product_agent == agent_id) {
-      product.product_pictures_after = req.files.map((f) => ({
-        url: f.path,
-        filename: f.filename,
-      }));
+      // product.product_pictures_after = req.files.map((f) => ({
+      //   url: f.path,
+      //   filename: f.filename,
+      // }));
       prodcut.product_defects_after = product_defects_after;
       product.product_description_after = product_description_after;
       product.prodcut_repair_status = 1;
