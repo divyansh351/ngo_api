@@ -108,7 +108,7 @@ module.exports.repairProduct = async (req, res) => {
       agent_id,
       product_description_after,
       product_defects_after,
-      prodcut_repair_amount,
+      product_repair_amount,
     } = req.body;
     const product = await Product.findById(product_id);
     if (product.product_agent == agent_id) {
@@ -116,10 +116,10 @@ module.exports.repairProduct = async (req, res) => {
       //   url: f.path,
       //   filename: f.filename,
       // }));
-      prodcut.product_defects_after = product_defects_after;
+      product.product_defects_after = product_defects_after;
       product.product_description_after = product_description_after;
-      product.prodcut_repair_status = 1;
-      product.prodcut_repair_amount = prodcut_repair_amount;
+      product.product_repair_status = 1;
+      product.product_repair_amount = product_repair_amount;
       await product.save();
       // res.send("Product details Succesfully Updated");
       res.json({
