@@ -35,9 +35,9 @@ module.exports.registerAgent = async (req, res) => {
     const registeredAgent = await Agent.register(agent, password);
     console.log(registeredAgent);
 
-    res.send("Agent Successfully registered");
+    res.json({ message: "Agent Successfully registered" });
   } catch (e) {
-    res.send(e);
+    res.json(e.message);
   }
 };
 
@@ -71,7 +71,7 @@ module.exports.viewAgent = async (req, res) => {
         if (authorizedData.hasOwnProperty("agent")) {
           res.send(authorizedData);
         } else {
-          res.send("Unauthorized access to agent's profile");
+          res.json({ message: "Unauthorized access to agent's profile" });
         }
       }
     });
