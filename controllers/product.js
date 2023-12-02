@@ -49,7 +49,7 @@ module.exports.donateProduct = async (req, res) => {
 module.exports.assignAgent = async (req, res) => {
     try {
         const { product_id, agent_id } = req.body;
-        let x = Math.floor((Math.random() * 999999) + 1);
+        let x = Math.floor(100000 + Math.random() * 900000)
         console.log(typeof product_id);
         const product = await Product.findById({ _id: product_id }); //abhi tk product_id string tha ,but _id se compare krne se wo object id bn gya
         await (await product.populate("product_donor")).populate("product_agent");
