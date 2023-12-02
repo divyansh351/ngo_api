@@ -49,6 +49,7 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'agent'
     },
+    product_otp: Number,
     remark1: String,
     remark2: String,
     remark3: String,
