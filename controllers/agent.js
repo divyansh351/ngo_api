@@ -28,10 +28,10 @@ module.exports.registerAgent = async (req, res) => {
       agent_active: agent_active,
     });
     console.log("HELLO2");
-    agent.agent_photo = req.files.map((f) => ({
-      url: f.path,
-      filename: f.filename,
-    }));
+    // agent.agent_photo = req.files.map((f) => ({
+    //   url: f.path,
+    //   filename: f.filename,
+    // }));
     const registeredAgent = await Agent.register(agent, password);
     console.log(registeredAgent);
 
