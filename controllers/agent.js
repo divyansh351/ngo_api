@@ -68,7 +68,7 @@ module.exports.viewAgent = async (req, res) => {
         console.log("ERROR: Could not connect to the protected route");
         res.sendStatus(403);
       } else {
-        if (authorizedData.hasOwnProperty("agent")) {
+        if (authorizedData.hasOwnProperty("agent") || authorizedData.hasOwnProperty("admin")) {
           res.send(authorizedData);
         } else {
           res.json({ message: "Unauthorized access to agent's profile" });

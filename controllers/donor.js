@@ -52,7 +52,7 @@ module.exports.viewProfile = async (req, res) => {
         console.log("ERROR: Could not connect to the protected route");
         res.sendStatus(403);
       } else {
-        if (authorizedData.hasOwnProperty("donor")) {
+        if (authorizedData.hasOwnProperty("donor") || authorizedData.hasOwnProperty("admin")) {
           res.send(authorizedData);
         } else {
           res.send("Unauthorized access to donor's profile");
