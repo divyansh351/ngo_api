@@ -32,7 +32,7 @@ const AgentSchema = new Schema({
     },
     agent_id_type: String,
     agent_active: Boolean,
-    // agent_verified: Boolean,
+    agent_verified: Boolean,
     agent_products: [
         {
             type: Schema.Types.ObjectId,

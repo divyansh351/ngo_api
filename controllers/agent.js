@@ -14,7 +14,7 @@ module.exports.registerAgent = async (req, res) => {
       username,
       password,
       agent_id_type,
-      agent_active,
+      agent_active
     } = req.body;
     const agent = new Agent({
       agent_name: agent_name,
@@ -26,6 +26,7 @@ module.exports.registerAgent = async (req, res) => {
       username: username,
       agent_id_type: agent_id_type,
       agent_active: agent_active,
+      agent_verified: false
     });
     console.log("HELLO2");
     // agent.agent_photo = req.files.map((f) => ({
@@ -79,6 +80,55 @@ module.exports.viewAgent = async (req, res) => {
     res.send(e);
   }
 };
+
+
+module.exports.verifyAgent = async (req, res) => {
+  const {
+    agent_id
+  } = req.body
+  try {
+    jwt.verify(req.token, process.env.JWT_KEY, async (err, authorizedData) => {
+      if (err) {
+        console.log("ERROR: Could not connect to the protected route");
+        res.sendStatus(403);
+      } else {
+        if (authorizedData.hasOwnProperty("admin")) {
+          await Agent.findByIdAndUpdate(agent_id, { agent_verified: true })
+          res.json({ message: 'verified succesfully' })
+        } else {
+          res.json({ message: "Unauthorized access to agent's profile" });
+        }
+      }
+    })
+  } catch (e) {
+    res.send(e);
+  }
+};
+
+module.exports.toggleActivity = async (req, res) => {
+  const {
+    agent_id,
+    agent_active
+  } = req.body
+  try {
+    jwt.verify(req.token, process.env.JWT_KEY, async (err, authorizedData) => {
+      if (err) {
+        console.log("ERROR: Could not connect to the protected route");
+        res.sendStatus(403);
+      } else {
+        if (authorizedData.hasOwnProperty("admin")) {
+          await Agent.findByIdAndUpdate(agent_id, { agent_active: agent_active })
+          res.json({ message: 'active status updated succesfully' })
+        } else {
+          res.json({ message: "Unauthorized access to agent's profile" });
+        }
+      }
+    })
+  } catch (e) {
+    res.send(e);
+  }
+};
+
 module.exports.getTopAgent = async (req, res) => {
   try {
     const agent = await Agent.find({});

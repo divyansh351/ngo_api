@@ -25,4 +25,7 @@ router
   .get((req, res) => res.status(401).send(req.session.messages));
 router.route("/getTopAgent").get(Agent.getTopAgent);
 
+router.route("/verification").post(checkToken, Agent.verifyAgent)
+router.route("/toggleActivity").post(checkToken, Agent.toggleActivity);
+
 module.exports = router;
