@@ -86,6 +86,7 @@ module.exports.verifyAgent = async (req, res) => {
   const {
     agent_id
   } = req.body
+
   try {
     jwt.verify(req.token, process.env.JWT_KEY, async (err, authorizedData) => {
       if (err) {
@@ -93,7 +94,10 @@ module.exports.verifyAgent = async (req, res) => {
         res.sendStatus(403);
       } else {
         if (authorizedData.hasOwnProperty("admin")) {
-          await Agent.findByIdAndUpdate(agent_id, { agent_verified: true })
+          console.log(req.body)
+          const agent = await Agent.findById(agent_id)
+          agent.agent_verified = true;
+          await agent.save();
           res.json({ message: 'verified succesfully' })
         } else {
           res.json({ message: "Unauthorized access to agent's profile" });
