@@ -143,7 +143,6 @@ module.exports.toggleActivity = async (req, res) => {
 module.exports.getTopAgent = async (req, res) => {
   try {
     const agent = await Agent.find({});
-    // res.send(agent);
     agent.sort((a, b) => {
       return b.agent_products.length - a.agent_products.length;
     });
@@ -151,5 +150,4 @@ module.exports.getTopAgent = async (req, res) => {
   } catch (e) {
     res.status(401).json({ name: e.name, message: e.message });
   }
-  // res.send("it works");
 };

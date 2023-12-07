@@ -50,7 +50,7 @@ module.exports.assignAgent = async (req, res) => {
     try {
         const { product_id, agent_id } = req.body;
         let x = Math.floor(100000 + Math.random() * 900000)
-        const product = await Product.findById({ _id: product_id }); //abhi tk product_id string tha ,but _id se compare krne se wo object id bn gya
+        const product = await Product.findById({ _id: product_id });
         await (await product.populate("product_donor")).populate("product_agent");
         if (product !== null) {
             if (product.product_agent == undefined) {
