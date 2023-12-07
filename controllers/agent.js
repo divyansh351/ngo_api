@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 
 module.exports.registerAgent = async (req, res) => {
   try {
-    console.log("HELLO1");
     const {
       agent_name,
       agent_aadhar_number,
@@ -25,59 +24,66 @@ module.exports.registerAgent = async (req, res) => {
       agent_email: agent_email,
       username: username,
       agent_id_type: agent_id_type,
-      agent_active: agent_active,
+      agent_active: false,
       agent_verified: false
     });
-    console.log("HELLO2");
     // agent.agent_photo = req.files.map((f) => ({
     //   url: f.path,
     //   filename: f.filename,
     // }));
-    const registeredAgent = await Agent.register(agent, password);
-    console.log(registeredAgent);
-
-    res.json({ message: "Agent Successfully registered" });
+    await Agent.register(agent, password);
+    res.status(201).json({ message: "Agent Successfully registered" });
   } catch (e) {
-    res.json(e.message);
+    res.status(500).json({ name: e.name, message: e.message });
   }
 };
 
 module.exports.loginAgent = async (req, res) => {
   var username = req.body.username;
   const agent = await Agent.findOne({ username });
-  jwt.sign(
-    { agent },
-    process.env.JWT_KEY,
-    { expiresIn: "1d" },
-    (err, token) => {
-      if (err) {
-        console.log(err);
+  try {
+    jwt.sign(
+      { agent },
+      process.env.JWT_KEY,
+      { expiresIn: "1d" },
+      (err, token) => {
+        if (err) {
+          res.status(403).json({
+            message: "protected Route"
+          });
+        }
+        res.status(200).json({
+          message: "Agent Login Successful",
+          token: token,
+          role: "agent",
+        });
       }
-      res.json({
-        message: "Agent Login Successful",
-        token: token,
-        role: "agent",
-      });
-    }
-  );
+    );
+  } catch (err) {
+    res.status(500).json({
+      name: err.name,
+      error: err.message
+    })
+  }
 };
 
 module.exports.viewAgent = async (req, res) => {
   try {
     jwt.verify(req.token, process.env.JWT_KEY, (err, authorizedData) => {
       if (err) {
-        console.log("ERROR: Could not connect to the protected route");
-        res.sendStatus(403);
+        res.status(403).json({
+          message: "protected Route"
+        });
       } else {
         if (authorizedData.hasOwnProperty("agent") || authorizedData.hasOwnProperty("admin")) {
-          res.send(authorizedData);
+          res.status(200).send(authorizedData);
         } else {
-          res.json({ message: "Unauthorized access to agent's profile" });
+          res.status(401).json({ message: "Unauthorized access to agent's profile" });
         }
       }
     });
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
 
@@ -90,22 +96,22 @@ module.exports.verifyAgent = async (req, res) => {
   try {
     jwt.verify(req.token, process.env.JWT_KEY, async (err, authorizedData) => {
       if (err) {
-        console.log("ERROR: Could not connect to the protected route");
-        res.sendStatus(403);
+        res.status(403).json({
+          message: "protected Route"
+        });
       } else {
         if (authorizedData.hasOwnProperty("admin")) {
-          console.log(req.body)
           const agent = await Agent.findById(agent_id)
           agent.agent_verified = true;
           await agent.save();
-          res.json({ message: 'verified succesfully' })
+          res.status(200).json({ message: 'verified succesfully' })
         } else {
-          res.json({ message: "Unauthorized access to agent's profile" });
+          res.status(401).json({ message: "Unauthorized access to agent's profile" });
         }
       }
     })
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
 
@@ -117,19 +123,20 @@ module.exports.toggleActivity = async (req, res) => {
   try {
     jwt.verify(req.token, process.env.JWT_KEY, async (err, authorizedData) => {
       if (err) {
-        console.log("ERROR: Could not connect to the protected route");
-        res.sendStatus(403);
+        res.status(403).json({
+          message: "protected Route"
+        });
       } else {
         if (authorizedData.hasOwnProperty("admin")) {
           await Agent.findByIdAndUpdate(agent_id, { agent_active: agent_active })
-          res.json({ message: 'active status updated succesfully' })
+          res.status(200).json({ message: 'active status updated succesfully' })
         } else {
-          res.json({ message: "Unauthorized access to agent's profile" });
+          res.status(401).json({ message: "Unauthorized access to agent's profile" });
         }
       }
     })
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
 
@@ -140,9 +147,9 @@ module.exports.getTopAgent = async (req, res) => {
     agent.sort((a, b) => {
       return b.agent_products.length - a.agent_products.length;
     });
-    res.json(agent);
+    res.status(200).json(agent);
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
   // res.send("it works");
 };

@@ -22,7 +22,7 @@ router.route("/login").post(
 router.route("/view").get(checkToken, Agent.viewAgent);
 router
   .route("/failure")
-  .get((req, res) => res.status(401).send(req.session.messages));
+  .get((req, res) => res.status(401).json({ message: req.session.messages[0] }));
 router.route("/getTopAgent").get(Agent.getTopAgent);
 
 router.route("/verification").post(checkToken, Agent.verifyAgent)

@@ -1,22 +1,25 @@
-const Admin = require('../models/admin')
 const jwt = require("jsonwebtoken");
 
 module.exports.show = async (req, res) => {
     try {
         jwt.verify(req.token, process.env.JWT_KEY, (err, authorizedData) => {
             if (err) {
-                console.log("ERROR: Could not connect to the protected route");
-                res.sendStatus(403);
+                res.status(403).json({
+                    message: "protected Route"
+                });
             } else {
                 if (authorizedData.hasOwnProperty("admin")) {
-                    res.send(authorizedData);
+                    res.status(200).send(authorizedData);
                 } else {
-                    res.send("Unauthorized access to donor's profile");
+                    res.status(403).json({ message: "Unauthorized access to donor's profile" });
                 }
             }
         });
-    } catch (e) {
-        res.send(e);
+    } catch (err) {
+        res.status(500).json({
+            name: err.name,
+            error: err.message
+        })
     }
 }
 
@@ -32,9 +35,12 @@ module.exports.verifyAdmin = (req, res) => {
                 { expiresIn: "1d" },
                 (err, token) => {
                     if (err) {
-                        console.log(err);
+                        res.status(500).json({
+                            name: err.name,
+                            error: err.message
+                        })
                     }
-                    res.json({
+                    res.status(200).json({
                         message: "Admin Verification Successful",
                         token: token,
                         role: "admin",
@@ -43,11 +49,14 @@ module.exports.verifyAdmin = (req, res) => {
             );
         }
         else {
-            res.json({
+            res.status(401).json({
                 message: "Wrong key",
             });
         }
-    } catch (e) {
-        res.send(e);
+    } catch (err) {
+        res.status(500).json({
+            name: err.name,
+            error: err.message
+        })
     }
 }

@@ -30,9 +30,11 @@ module.exports.registerDonor = async (req, res) => {
       { expiresIn: "1d" },
       (err, token) => {
         if (err) {
-          console.log(err);
+          res.status(403).json({
+            message: "protected Route"
+          });
         }
-        res.json({
+        res.status(201).json({
           message: "Registration Successful",
           token: token,
           role: "donor",
@@ -40,8 +42,7 @@ module.exports.registerDonor = async (req, res) => {
       }
     );
   } catch (e) {
-    console.log(e);
-    res.send(e);
+    res.status(500).json({ name: e.name, message: e.message });
   }
 };
 
@@ -49,18 +50,19 @@ module.exports.viewProfile = async (req, res) => {
   try {
     jwt.verify(req.token, process.env.JWT_KEY, (err, authorizedData) => {
       if (err) {
-        console.log("ERROR: Could not connect to the protected route");
-        res.sendStatus(403);
+        res.status(403).json({
+          message: "protected Route"
+        });
       } else {
         if (authorizedData.hasOwnProperty("donor") || authorizedData.hasOwnProperty("admin")) {
-          res.send(authorizedData);
+          res.status(200).send(authorizedData);
         } else {
-          res.send("Unauthorized access to donor's profile");
+          res.status(401).json({ message: "Unauthorized access to agent's profile" });
         }
       }
     });
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
 
@@ -76,9 +78,11 @@ module.exports.verifyDonor = async (req, res) => {
         { expiresIn: "1d" },
         (err, token) => {
           if (err) {
-            console.log(err);
+            res.status(403).json({
+              message: "protected Route"
+            });
           }
-          res.json({
+          res.status(201).json({
             message: "Verification Successful",
             token: token,
             role: "donor",
@@ -86,10 +90,10 @@ module.exports.verifyDonor = async (req, res) => {
         }
       );
     } else {
-      res.status(401).send("Email id and phone number does not match");
+      res.status(401).json({ message: "Email id and phone number does not match" });
     }
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
 module.exports.getTopDonor = async (req, res) => {
@@ -98,8 +102,8 @@ module.exports.getTopDonor = async (req, res) => {
     donor.sort((a, b) => {
       return b.donor_products.length - a.donor_products.length;
     });
-    res.json(donor);
+    res.status(200).json(donor);
   } catch (e) {
-    res.send(e);
+    res.status(401).json({ name: e.name, message: e.message });
   }
 };
