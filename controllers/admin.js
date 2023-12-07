@@ -26,7 +26,6 @@ module.exports.verifyAdmin = (req, res) => {
     }
     try {
         if (req.body.admin_key == process.env.ADMIN_KEY) {
-            req.session.tag = 1;
             jwt.sign(
                 { admin },
                 process.env.JWT_KEY,
@@ -44,7 +43,9 @@ module.exports.verifyAdmin = (req, res) => {
             );
         }
         else {
-            req.session.tag = 0;
+            res.json({
+                message: "Wrong key",
+            });
         }
     } catch (e) {
         res.send(e);
