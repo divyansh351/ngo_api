@@ -16,6 +16,7 @@ const session = require("express-session");
 const Agent = require("./models/agent");
 const cors = require("cors");
 
+
 const dbUrl = process.env.DB_URL;
 const port = process.env.PORT || 3000;
 mongoose.connect(dbUrl);
@@ -38,10 +39,10 @@ const sessionOptions = {
 };
 
 app.use(cors());
+// app.use(fileUpload());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride("_method"));
-
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
