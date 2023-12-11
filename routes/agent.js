@@ -11,7 +11,7 @@ const router = express.Router();
 
 router
   .route("/register")
-  .post(upload.array("agent_photo"), catchAsync(Agent.registerAgent));
+  .post(upload.array("image"), catchAsync(Agent.registerAgent));
 router.route("/login").post(
   passport.authenticate("local", {
     failureRedirect: "/agent/failure",

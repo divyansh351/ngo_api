@@ -31,6 +31,10 @@ const AgentSchema = new Schema({
         unique: true
     },
     agent_id_type: String,
+    agent_id_photo: {
+        url: String,
+        filename: String
+    },
     agent_active: Boolean,
     agent_verified: Boolean,
     agent_products: [

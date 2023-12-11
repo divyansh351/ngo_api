@@ -27,10 +27,14 @@ module.exports.registerAgent = async (req, res) => {
       agent_active: false,
       agent_verified: false
     });
-    // agent.agent_photo = req.files.map((f) => ({
-    //   url: f.path,
-    //   filename: f.filename,
-    // }));
+    agent.agent_id_photo = {
+      url: (req.files[0]).path,
+      filename: (req.files[0]).filename
+    }
+    agent.agent_photo = {
+      url: (req.files[1]).path,
+      filename: (req.files[1]).filename
+    }
     await Agent.register(agent, password);
     res.status(201).json({ message: "Agent Successfully registered" });
   } catch (e) {
