@@ -145,7 +145,7 @@ module.exports.viewProduct = async (req, res) => {
     try {
         const product_id = req.params.id;
         const product = await Product.findById(product_id);
-        await (await product.populate("product_donor")).populate("product_agent");
+        await (await (await product.populate("product_donor")).populate("product_agent")).populate("product_receiver");
         res.status(200).json(product);
     } catch (e) {
         res.status(500).json({ message: e.message, name: e.name });
@@ -155,15 +155,15 @@ module.exports.viewProduct = async (req, res) => {
 module.exports.receiveProduct = async (req, res) => {
     try {
         const { product_id, receiver_aadhar_number, receiver_name, agent_id } = req.body;
-        var receiver = await Receiver.findOne({ receiver_aadhar_number : receiver_aadhar_number })
-        if(!receiver){
+        var receiver = await Receiver.findOne({ receiver_aadhar_number: receiver_aadhar_number })
+        if (!receiver) {
             receiver = new Receiver({
                 receiver_name: receiver_name,
                 receiver_aadhar_number: receiver_aadhar_number
             })
             await receiver.save();
         }
-        receiver = await Receiver.findOne({ receiver_aadhar_number : receiver_aadhar_number })
+        receiver = await Receiver.findOne({ receiver_aadhar_number: receiver_aadhar_number })
         const product = await Product.findById(product_id);
         if (agent_id == product.product_agent) {
             product.product_receiver = receiver._id;
