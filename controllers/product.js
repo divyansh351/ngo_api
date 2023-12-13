@@ -2,6 +2,7 @@ const Product = require("../models/product");
 const Donor = require("../models/donor");
 const Agent = require("../models/agent");
 const nodemailer = require("nodemailer");
+const Receiver = require("../models/receiver")
 
 module.exports.showProducts = async (req, res) => {
     try {
@@ -118,10 +119,10 @@ module.exports.repairProduct = async (req, res) => {
         } = req.body;
         const product = await Product.findById(product_id);
         if (product.product_agent == agent_id) {
-            // product.product_pictures_after = req.files.map((f) => ({
-            //   url: f.path,
-            //   filename: f.filename,
-            // }));
+            product.product_pictures_after = req.files.map((f) => ({
+                url: f.path,
+                filename: f.filename,
+            }));
             product.product_defects_after = product_defects_after;
             product.product_description_after = product_description_after;
             product.product_repair_status = 1;
@@ -153,11 +154,23 @@ module.exports.viewProduct = async (req, res) => {
 
 module.exports.receiveProduct = async (req, res) => {
     try {
-        const { product_id, agent_id } = req.body;
+        const { product_id, receiver_aadhar_number, receiver_name, agent_id } = req.body;
+        var receiver = await Receiver.findOne({ receiver_aadhar_number : receiver_aadhar_number })
+        if(!receiver){
+            receiver = new Receiver({
+                receiver_name: receiver_name,
+                receiver_aadhar_number: receiver_aadhar_number
+            })
+            await receiver.save();
+        }
+        receiver = await Receiver.findOne({ receiver_aadhar_number : receiver_aadhar_number })
         const product = await Product.findById(product_id);
         if (agent_id == product.product_agent) {
+            product.product_receiver = receiver._id;
+            receiver.receiver_products.push(product_id);
             product.product_received = 1;
             await product.save();
+            await receiver.save();
             res.status(200).json({
                 message: "Final Donation Successful",
             });

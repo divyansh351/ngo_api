@@ -49,6 +49,10 @@ const ProductSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'agent'
     },
+    product_receiver: {
+        type: Schema.Types.ObjectId,
+        ref: 'receiver'
+    },
     product_otp: Number,
     remark1: String,
     remark2: String,

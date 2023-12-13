@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ReceiverSchema = new Schema({
+    receiver_name: {
+        type: String,
+        required: true,
+    },
     receiver_aadhar_number: {
         type: String,
         required: true,
